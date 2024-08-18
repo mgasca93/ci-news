@@ -64,4 +64,10 @@ class AuthController extends BaseController
             return $this->index();
         endif;
     }
+
+    public function logout()
+    {
+        $this->session->destroy();
+        return redirect()->route('login_form');
+    }
 }
