@@ -35,7 +35,7 @@ class UsersModel extends Model
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
+    protected $beforeInsert   = ['hashPassword', 'createdAt'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
@@ -43,4 +43,21 @@ class UsersModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function hashPassword( array $data )
+    {
+        if( isset( $data['data']['password'] ) ) :
+            $data['data']['password'] = password_hash( $data['data']['password'],  PASSWORD_DEFAULT );
+        endif;
+
+        return $data;
+    }
+
+    public function createdAt( array $data )
+    {
+        helper('date');
+        $data['data']['created_at'] = date('Y-m-d H:i:s', now());
+        $data['data']['updated_at'] = date('Y-m-d H:i:s', now());
+        return $data;
+    }
 }
