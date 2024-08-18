@@ -6,9 +6,10 @@ use CodeIgniter\Database\Migration;
 
 class CreateTableNews extends Migration
 {
+    protected $fields = [];
     public function up()
     {
-        $fields = [
+        $this->fields = [
             'id'            => [
                 'type'              => 'INT',
                 'constraint'        => 5,
@@ -28,9 +29,17 @@ class CreateTableNews extends Migration
             'body'          => [
                 'type'              => 'TEXT',
                 'null'              => false,
-            ]
+            ],
+            'created_at'    => [
+                'type'          => 'DATETIME',
+                'null'          => false,
+            ],
+            'updated_at'    => [
+                'type'          => 'DATETIME',
+                'null'          => false,
+            ],
         ];
-        $this->forge->addField( $fields );
+        $this->forge->addField( $this->fields );
         $this->forge->addKey( 'id', true );
         $this->forge->createTable( 'news' );
     }
