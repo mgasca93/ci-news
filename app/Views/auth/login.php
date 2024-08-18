@@ -9,7 +9,7 @@
     </div>
 <?php endif; ?>
 
-<form action="/auth/login" method="POST">
+<form action="<?= url_to('authenticate') ?>" method="POST">
     <div class="main">
         <?= csrf_field(); ?>
         <label for="email">E-mail :</label>
