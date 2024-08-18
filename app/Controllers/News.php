@@ -9,6 +9,14 @@ use App\Models\NewsModel;
 
 class News extends BaseController
 {
+
+    private $session = NULL;
+
+    public function __construct()
+    {
+        $this->session = service('session');
+    }
+
     public function index()
     {
         $model = model(NewsModel::class);
@@ -35,5 +43,42 @@ class News extends BaseController
         return      view( 'templates/header', $data )
                   . view( 'news/show', $data )
                   . view( 'templates/footer');
+    }
+
+    public function create()
+    {
+        helper('form');
+        $data['title'] = 'Create news item';
+        return    view( 'templates/header', $data )
+                . view( 'news/create' )
+                . view( 'templates/footer');
+    }
+
+    public function store()
+    {       
+
+        $data = $this->request->getPost(['title', 'body']);
+
+        $validations = [
+            'title'     => 'required|max_length[255]|min_length[3]|is_unique[news.title]',
+            'body'      => 'required|max_length[5000]|min_length[10]'
+        ];
+
+        if( ! $this->validateData( $data, $validations ) ) :
+            return $this->create();
+        endif;
+
+        /**
+         * Get the validate data
+         */
+        $post = $this->validator->getValidated();
+        $post['slug'] = strtolower( url_title($post['title'] ) );
+
+        $model = model( NewsModel::class );
+
+        $model->save($post);
+        $this->session->setFlashdata('success','News created with success');
+
+        return $this->create();
     }
 }
