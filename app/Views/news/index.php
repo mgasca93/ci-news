@@ -1,4 +1,6 @@
 <h2><?= esc( $title ) ?></h2>
+<a href="/news/create">Create new item</a>
+<br><br>
 <?php if( $news_list !== [] ) : ?>
     <?php foreach( $news_list as $new_item ) : ?>
         <h3><?= esc( $new_item['title'] ) ?></h3>
